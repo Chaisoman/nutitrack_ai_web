@@ -12,6 +12,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js"></script>
     <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.min.js"></script>
+    <script src="./config.js"></script>
     <style>
         body { font-family: Arial, sans-serif; }
         .snackbar { 
@@ -47,17 +48,6 @@
         // Debug: Log rendering start
         console.log("Starting NutriTrack AI rendering...");
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAdeC7w_-hSSfqSAeciH4F5vlj0p6eBXRM",
-            authDomain: "nutricare-app-f2ff8.firebaseapp.com",
-            databaseURL: "https://nutricare-app-f2ff8-default-rtdb.firebaseio.com",
-            projectId: "nutricare-app-f2ff8",
-            storageBucket: "nutricare-app-f2ff8.appspot.com",
-            messagingSenderId: "333784229349",
-            appId: "1:333784229349:web:bcf4cf43c0af618018bb0c"
-        };
-
         // Initialize Firebase
         let db;
         try {
@@ -65,7 +55,7 @@
             console.log("Firebase initialized:", app.name);
             db = Firebase.database();
         } catch (error) {
-            console.error("Firebase initialization error:", error);
+            console.error("Firebase initialization error:", error.message);
             showSnackbar("Failed to connect to database: " + error.message);
         }
 
@@ -73,9 +63,13 @@
         const showSnackbar = (message) => {
             console.log("Showing snackbar:", message);
             const snackbar = document.getElementById('snackbar');
-            snackbar.textContent = message;
-            snackbar.className = "snackbar show";
-            setTimeout(() => { snackbar.className = "snackbar"; }, 3000);
+            if (snackbar) {
+                snackbar.textContent = message;
+                snackbar.className = "snackbar show";
+                setTimeout(() => { snackbar.className = "snackbar"; }, 3000);
+            } else {
+                console.error("Snackbar element not found");
+            }
         };
 
         // Screening Screen Component
@@ -362,10 +356,15 @@
 
         // Render the app
         try {
+            if (!window.React || !window.ReactDOM || !window.Recharts || !window.Firebase) {
+                console.error("Required libraries not loaded");
+                showSnackbar("Failed to load required libraries");
+                return;
+            }
             ReactDOM.render(<App />, document.getElementById('root'));
             console.log("App rendered successfully");
         } catch (error) {
-            console.error("Rendering error:", error);
+            console.error("Rendering error:", error.message);
             showSnackbar("Failed to render app: " + error.message);
         }
     </script>
