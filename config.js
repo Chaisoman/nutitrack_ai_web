@@ -1,5 +1,5 @@
 // Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: "AIzaSyAdeC7w_-hSSfqSAeciH4F5vlj0p6eBXRM",
     authDomain: "nutricare-app-f2ff8.firebaseapp.com",
     databaseURL: "https://nutricare-app-f2ff8-default-rtdb.firebaseio.com",
