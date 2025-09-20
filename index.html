@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriTrack AI</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>" />
-    <!-- Use Tailwind CDN as fallback if tailwind.css generation fails -->
+    <!-- Use Tailwind CDN as fallback; uncomment next line if tailwind.css is generated -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- <link href="./tailwind.css" rel="stylesheet"> -->
     <script>
@@ -22,12 +22,12 @@
             }
         };
     </script>
-    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" onerror="console.error('Failed to load React'); window.showSnackbar('Failed to load React')"></script>
-    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" onerror="console.error('Failed to load ReactDOM'); window.showSnackbar('Failed to load ReactDOM')"></script>
-    <script src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js" onerror="console.error('Failed to load Babel'); window.showSnackbar('Failed to load Babel')"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js" onerror="console.error('Failed to load Firebase App'); window.showSnackbar('Failed to load Firebase App')"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js" onerror="console.error('Failed to load Firebase Database'); window.showSnackbar('Failed to load Firebase Database')"></script>
-    <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.min.js" onerror="console.error('Failed to load Recharts'); window.showSnackbar('Failed to load Recharts')"></script>
+    <script src="./libs/react.production.min.js" onerror="console.error('Failed to load React'); window.showSnackbar('Failed to load React')"></script>
+    <script src="./libs/react-dom.production.min.js" onerror="console.error('Failed to load ReactDOM'); window.showSnackbar('Failed to load ReactDOM')"></script>
+    <script src="./libs/babel.min.js" onerror="console.error('Failed to load Babel'); window.showSnackbar('Failed to load Babel')"></script>
+    <script src="./libs/firebase-app.js" onerror="console.error('Failed to load Firebase App'); window.showSnackbar('Failed to load Firebase App')"></script>
+    <script src="./libs/firebase-database.js" onerror="console.error('Failed to load Firebase Database'); window.showSnackbar('Failed to load Firebase Database')"></script>
+    <script src="./libs/Recharts.min.js" onerror="console.error('Failed to load Recharts'); window.showSnackbar('Failed to load Recharts')"></script>
     <script src="./config.js" onerror="console.error('Failed to load config.js'); window.showSnackbar('Failed to load Firebase config')"></script>
     <style>
         body { font-family: Arial, sans-serif; }
