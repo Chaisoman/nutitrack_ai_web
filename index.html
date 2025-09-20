@@ -9,10 +9,10 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
     <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.min.js"></script>
-    <script src="./config.js"></script>
+    <script type="module" src="./config.js"></script>
     <style>
         body { font-family: Arial, sans-serif; }
         .snackbar { 
@@ -44,20 +44,13 @@
 <body>
     <div id="root"></div>
     <div id="snackbar" class="snackbar"></div>
-    <script type="text/babel">
+    <script type="module">
+        import { firebaseConfig } from './config.js';
+        import firebase from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js';
+        import { getDatabase, ref, push, onValue } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js';
+
         // Debug: Log rendering start
         console.log("Starting NutriTrack AI rendering...");
-
-        // Initialize Firebase
-        let db;
-        try {
-            const app = Firebase.initializeApp(firebaseConfig);
-            console.log("Firebase initialized:", app.name);
-            db = Firebase.database();
-        } catch (error) {
-            console.error("Firebase initialization error:", error.message);
-            showSnackbar("Failed to connect to database: " + error.message);
-        }
 
         // Show Snackbar
         const showSnackbar = (message) => {
@@ -71,6 +64,25 @@
                 console.error("Snackbar element not found");
             }
         };
+
+        // Initialize Firebase
+        let db;
+        try {
+            const app = firebase.initializeApp(firebaseConfig);
+            console.log("Firebase initialized:", app.name);
+            db = getDatabase(app);
+        } catch (error) {
+            console.error("Firebase initialization error:", error.message);
+            showSnackbar("Failed to connect to database: " + error.message);
+            return;
+        }
+
+        // Check for required libraries
+        if (!window.React || !window.ReactDOM || !window.Recharts) {
+            console.error("Required libraries not loaded");
+            showSnackbar("Failed to load required libraries");
+            return;
+        }
 
         // Screening Screen Component
         const ScreeningScreen = () => {
@@ -128,7 +140,7 @@
                     timestamp: new Date().toISOString(),
                     status: 'pending'
                 };
-                db.ref('patients').push(patientData)
+                push(ref(db, 'patients'), patientData)
                     .then(() => {
                         showSnackbar("Data saved successfully");
                         setMuac('');
@@ -194,8 +206,8 @@
                     setLoading(false);
                     return;
                 }
-                const ref = db.ref('patients').limitToLast(50);
-                ref.on('value', (snapshot) => {
+                const patientsRef = ref(db, 'patients');
+                onValue(patientsRef, (snapshot) => {
                     const data = snapshot.val();
                     if (data) {
                         const patientList = Object.entries(data).map(([id, patient]) => ({ id, ...patient }));
@@ -211,7 +223,7 @@
                     setLoading(false);
                     console.error("Firebase fetch error:", err);
                 });
-                return () => ref.off();
+                return () => patientsRef.off();
             }, [filter]);
 
             return (
@@ -245,7 +257,7 @@
         };
 
         // Treatment Recommendation Screen Component
-        const TreatmentRecommendationScreen = () => {
+        const TrendsScreen = () => {
             console.log("Rendering TreatmentRecommendationScreen...");
             const [muac, setMuac] = React.useState('');
             const [age, setAge] = React.useState('');
@@ -356,11 +368,6 @@
 
         // Render the app
         try {
-            if (!window.React || !window.ReactDOM || !window.Recharts || !window.Firebase) {
-                console.error("Required libraries not loaded");
-                showSnackbar("Failed to load required libraries");
-                return;
-            }
             ReactDOM.render(<App />, document.getElementById('root'));
             console.log("App rendered successfully");
         } catch (error) {
